@@ -1,0 +1,25 @@
+---
+# Generic Linux tasks go here
+- name: Check variable definitions
+  ansible.builtin.assert:
+    that: "{{ var_name }} is defined"
+    msg: "{{ var_name }} is undefined"
+  loop:
+    - firewalld_config_path
+  loop_control:
+    loop_var: var_name
+
+- name: Set Firewalld Backend to iptables
+  ansible.builtin.lineinfile:
+    path: "{{ firewalld_config_path }}"
+    state: present
+    regexp: "^FirewallBackend="
+    line: "FirewallBackend=iptables"
+
+- name: Restart firewalld service
+  ansible.builtin.service:
+    name: firewalld
+    state: reloaded
+
+- name: Flush nft ruleset
+  ansible.builtin.shell: nft flush ruleset

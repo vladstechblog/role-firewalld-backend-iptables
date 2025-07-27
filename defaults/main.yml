@@ -1,0 +1,3 @@
+---
+# defaults file for test_role
+firewalld_config_path: /etc/firewalld/firewalld.conf
